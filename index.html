@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FinFlow — Personal Finance Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <div class="grain"></div>
+
+  <header>
+    <div class="logo">Fin<span>Flow</span></div>
+    <nav>
+      <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="nav-btn" data-tab="transactions">Transactions</button>
+      <button class="nav-btn" data-tab="analytics">Analytics</button>
+    </nav>
+    <div class="header-balance">
+      <span class="label">Net Balance</span>
+      <span class="amount" id="header-balance">$0.00</span>
+    </div>
+  </header>
+
+  <!-- DASHBOARD TAB -->
+  <main id="tab-dashboard" class="tab active">
+    <section class="hero">
+      <div class="hero-text">
+        <p class="overline">Your financial pulse</p>
+        <h1 id="dash-balance">$0.00</h1>
+        <p class="sub">Track every dollar. Own your future.</p>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card income-card">
+          <span class="stat-label">Income</span>
+          <span class="stat-val" id="dash-income">$0.00</span>
+          <div class="stat-bar"><div class="stat-fill income-fill" id="income-bar"></div></div>
+        </div>
+        <div class="stat-card expense-card">
+          <span class="stat-label">Expenses</span>
+          <span class="stat-val" id="dash-expense">$0.00</span>
+          <div class="stat-bar"><div class="stat-fill expense-fill" id="expense-bar"></div></div>
+        </div>
+        <div class="stat-card savings-card">
+          <span class="stat-label">Savings Rate</span>
+          <span class="stat-val" id="dash-savings">0%</span>
+          <div class="stat-bar"><div class="stat-fill savings-fill" id="savings-bar"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="recent-section">
+      <h2>Recent Transactions</h2>
+      <ul class="tx-list" id="recent-list">
+        <li class="empty-state">No transactions yet. Add one below ↓</li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- TRANSACTIONS TAB -->
+  <main id="tab-transactions" class="tab">
+    <section class="form-section">
+      <h2>Add Transaction</h2>
+      <div class="form-card">
+        <div class="form-row">
+          <div class="field">
+            <label>Description</label>
+            <input type="text" id="desc" placeholder="e.g. Grocery run" />
+          </div>
+          <div class="field">
+            <label>Amount ($)</label>
+            <input type="number" id="amount" placeholder="0.00" min="0" step="0.01"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Category</label>
+            <select id="category">
+              <option value="Food">🍔 Food</option>
+              <option value="Transport">🚗 Transport</option>
+              <option value="Housing">🏠 Housing</option>
+              <option value="Entertainment">🎮 Entertainment</option>
+              <option value="Health">💊 Health</option>
+              <option value="Salary" selected>💼 Salary</option>
+              <option value="Freelance">💻 Freelance</option>
+              <option value="Other">📦 Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Type</label>
+            <div class="type-toggle">
+              <button class="type-btn active" data-type="income">+ Income</button>
+              <button class="type-btn" data-type="expense">− Expense</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Date</label>
+            <input type="date" id="date" />
+          </div>
+        </div>
+        <button class="add-btn" id="add-btn">Add Transaction</button>
+      </div>
+    </section>
+
+    <section class="tx-section">
+      <div class="tx-header">
+        <h2>All Transactions</h2>
+        <div class="filter-row">
+          <select id="filter-type">
+            <option value="all">All Types</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+          <select id="filter-cat">
+            <option value="all">All Categories</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Housing">Housing</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Health">Health</option>
+            <option value="Salary">Salary</option>
+            <option value="Freelance">Freelance</option>
+            <option value="Other">Other</option>
+          </select>
+          <button class="clear-btn" id="clear-btn">Clear All</button>
+        </div>
+      </div>
+      <ul class="tx-list full" id="all-list">
+        <li class="empty-state">No transactions yet.</li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- ANALYTICS TAB -->
+  <main id="tab-analytics" class="tab">
+    <section class="analytics-section">
+      <h2>Spending by Category</h2>
+      <div class="chart-container">
+        <canvas id="cat-chart" width="360" height="360"></canvas>
+        <div class="chart-legend" id="chart-legend"></div>
+      </div>
+    </section>
+    <section class="analytics-section">
+      <h2>Monthly Overview</h2>
+      <div class="bar-chart-container">
+        <canvas id="monthly-chart" width="700" height="260"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
