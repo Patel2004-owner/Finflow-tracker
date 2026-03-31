@@ -1,0 +1,195 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); color: var(--color-text-primary); }
+.dash { padding: 1.5rem 0; }
+.section-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); letter-spacing: 0.05em; text-transform: uppercase; margin: 2rem 0 0.75rem; }
+.metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+.metric { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.85rem 1rem; }
+.metric-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.metric-value { font-size: 22px; font-weight: 500; }
+.metric-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+.chart-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; margin-top: 0.75rem; }
+.chart-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem; }
+.chart-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 0.75rem; }
+.chart-wrap { position: relative; width: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; font-size: 11px; color: var(--color-text-secondary); }
+.legend span { display: flex; align-items: center; gap: 4px; }
+.leg-sq { width: 9px; height: 9px; border-radius: 2px; }
+.stat-table { width: 100%; font-size: 13px; border-collapse: collapse; }
+.stat-table th { text-align: left; font-weight: 500; font-size: 11px; color: var(--color-text-secondary); padding: 0 8px 6px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.stat-table td { padding: 6px 8px 6px 0; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); }
+.badge { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+.badge-green { background: #EAF3DE; color: #3B6D11; }
+.badge-red { background: #FCEBEB; color: #A32D2D; }
+.badge-amber { background: #FAEEDA; color: #854F0B; }
+@media (prefers-color-scheme: dark) {
+  .badge-green { background: #27500A; color: #C0DD97; }
+  .badge-red { background: #501313; color: #F09595; }
+  .badge-amber { background: #633806; color: #FAC775; }
+}
+</style>
+
+<div class="dash">
+
+<div class="metric-grid">
+  <div class="metric">
+    <div class="metric-label">Total Revenue</div>
+    <div class="metric-value" style="color:#185FA5">$2.84M</div>
+    <div class="metric-sub">+18.4% vs last year</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">Total Orders</div>
+    <div class="metric-value">14,320</div>
+    <div class="metric-sub">avg 1,193 / month</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">Avg Order Value</div>
+    <div class="metric-value" style="color:#0F6E56">$198</div>
+    <div class="metric-sub">+6.2% vs last year</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">Gross Margin</div>
+    <div class="metric-value" style="color:#854F0B">41.3%</div>
+    <div class="metric-sub">industry avg: 38%</div>
+  </div>
+</div>
+
+<div class="section-title">Monthly Revenue &amp; Orders (2024)</div>
+<div class="chart-grid">
+  <div class="chart-card">
+    <div class="chart-title">Revenue trend + forecast</div>
+    <div class="legend">
+      <span><span class="leg-sq" style="background:#185FA5"></span>Actual</span>
+      <span><span class="leg-sq" style="background:#9FE1CB; border: 1px dashed #0F6E56"></span>Forecast</span>
+    </div>
+    <div class="chart-wrap" style="height:210px"><canvas id="c1"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Revenue by product category</div>
+    <div class="legend">
+      <span><span class="leg-sq" style="background:#185FA5"></span>Electronics 38%</span>
+      <span><span class="leg-sq" style="background:#0F6E56"></span>Apparel 24%</span>
+      <span><span class="leg-sq" style="background:#854F0B"></span>Home 20%</span>
+      <span><span class="leg-sq" style="background:#993C1D"></span>Sports 11%</span>
+      <span><span class="leg-sq" style="background:#72243E"></span>Other 7%</span>
+    </div>
+    <div class="chart-wrap" style="height:210px"><canvas id="c2"></canvas></div>
+  </div>
+</div>
+
+<div class="chart-grid" style="margin-top:12px">
+  <div class="chart-card">
+    <div class="chart-title">Weekly sales heatmap (orders)</div>
+    <div class="chart-wrap" style="height:190px"><canvas id="c3"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Revenue by region</div>
+    <div class="chart-wrap" style="height:190px"><canvas id="c4"></canvas></div>
+  </div>
+</div>
+
+<div class="section-title">Statistical Summary by Category</div>
+<div class="chart-card" style="margin-top:0">
+  <table class="stat-table">
+    <thead>
+      <tr>
+        <th>Category</th><th>Revenue</th><th>Orders</th><th>Avg Order</th><th>Margin</th><th>YoY Growth</th><th>Trend</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Electronics</td><td>$1,077K</td><td>4,210</td><td>$256</td><td>34.2%</td><td>+22.1%</td><td><span class="badge badge-green">↑ Strong</span></td></tr>
+      <tr><td>Apparel</td><td>$681K</td><td>3,840</td><td>$177</td><td>51.8%</td><td>+15.3%</td><td><span class="badge badge-green">↑ Growing</span></td></tr>
+      <tr><td>Home &amp; Garden</td><td>$568K</td><td>3,210</td><td>$177</td><td>43.1%</td><td>+9.7%</td><td><span class="badge badge-amber">→ Steady</span></td></tr>
+      <tr><td>Sports</td><td>$312K</td><td>1,890</td><td>$165</td><td>38.9%</td><td>-3.2%</td><td><span class="badge badge-red">↓ Declining</span></td></tr>
+      <tr><td>Other</td><td>$199K</td><td>1,170</td><td>$170</td><td>29.4%</td><td>+4.1%</td><td><span class="badge badge-amber">→ Steady</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title">Predictive Model — Linear Regression Forecast</div>
+<div class="chart-card">
+  <div class="chart-title">Q1 2025 forecast: $312K &nbsp;|&nbsp; R² = 0.91 &nbsp;|&nbsp; MAE = $14.2K &nbsp;|&nbsp; 95% CI: $284K – $340K</div>
+  <div class="chart-wrap" style="height:200px"><canvas id="c5"></canvas></div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const revenue = [178,195,210,225,218,242,258,271,265,290,305,295];
+const forecast = [null,null,null,null,null,null,null,null,null,null,null,295,312,328,345];
+const fLabels = [...months,'Q1 F','Q2 F','Q3 F'];
+
+new Chart(document.getElementById('c1'),{
+  type:'line',
+  data:{
+    labels: fLabels,
+    datasets:[
+      {label:'Actual',data:[...revenue,...Array(3).fill(null)],borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,0.08)',fill:true,tension:0.4,pointRadius:3,pointBackgroundColor:'#185FA5'},
+      {label:'Forecast',data:[...Array(12).fill(null),312,328,345],borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.08)',fill:true,tension:0.4,borderDash:[5,4],pointRadius:4,pointBackgroundColor:'#1D9E75'}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+v+'K',font:{size:10}},grid:{color:'rgba(128,128,128,0.1)'}},x:{ticks:{font:{size:10}},grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('c2'),{
+  type:'doughnut',
+  data:{
+    labels:['Electronics','Apparel','Home & Garden','Sports','Other'],
+    datasets:[{data:[38,24,20,11,7],backgroundColor:['#185FA5','#0F6E56','#854F0B','#993C1D','#72243E'],borderWidth:0,hoverOffset:6}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'62%'}
+});
+
+const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const weekData = [
+  {label:'Morning',data:[38,42,45,50,55,60,30]},
+  {label:'Afternoon',data:[60,68,72,75,85,95,45]},
+  {label:'Evening',data:[45,50,55,52,70,88,55]},
+];
+new Chart(document.getElementById('c3'),{
+  type:'bar',
+  data:{
+    labels:days,
+    datasets: weekData.map((s,i)=>({label:s.label,data:s.data,backgroundColor:['#185FA5','#1D9E75','#BA7517'][i],borderRadius:2,barPercentage:0.75}))
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,ticks:{font:{size:10}},grid:{display:false}},y:{stacked:true,ticks:{font:{size:10}},grid:{color:'rgba(128,128,128,0.1)'}}}}
+});
+
+new Chart(document.getElementById('c4'),{
+  type:'bar',
+  data:{
+    labels:['North','South','East','West','Central'],
+    datasets:[{label:'Revenue ($K)',data:[720,580,510,640,390],backgroundColor:['#185FA5','#0F6E56','#854F0B','#993C1D','#534AB7'],borderRadius:4,barPercentage:0.6}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>'$'+v+'K',font:{size:10}},grid:{color:'rgba(128,128,128,0.1)'}},y:{ticks:{font:{size:10}},grid:{display:false}}}}
+});
+
+const allMonths = [...months,'Q1','Q2','Q3'];
+const allRev = [...revenue,312,328,345];
+const n = revenue.length;
+const xMean = (n-1)/2;
+const yMean = revenue.reduce((a,b)=>a+b,0)/n;
+const slope = revenue.reduce((s,y,i)=>s+(i-xMean)*(y-yMean),0) / revenue.reduce((s,_,i)=>s+(i-xMean)**2,0);
+const intercept = yMean - slope*xMean;
+const trendLine = allMonths.map((_,i)=>Math.round(intercept+slope*i));
+const ciUp = trendLine.map(v=>Math.round(v*1.06));
+const ciLow = trendLine.map(v=>Math.round(v*0.94));
+
+new Chart(document.getElementById('c5'),{
+  type:'line',
+  data:{
+    labels: allMonths,
+    datasets:[
+      {label:'CI Upper',data:ciUp,borderColor:'transparent',backgroundColor:'rgba(24,95,165,0.07)',fill:'+1',pointRadius:0},
+      {label:'Trend',data:trendLine,borderColor:'#185FA5',borderWidth:2,borderDash:[6,3],fill:false,pointRadius:0,tension:0},
+      {label:'CI Lower',data:ciLow,borderColor:'transparent',backgroundColor:'rgba(24,95,165,0.07)',fill:'-1',pointRadius:0},
+      {label:'Actual',data:[...revenue,...Array(3).fill(null)],borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.1)',fill:false,tension:0.4,pointRadius:3,pointBackgroundColor:'#1D9E75'},
+      {label:'Forecast',data:[...Array(12).fill(null),312,328,345],borderColor:'#BA7517',backgroundColor:'rgba(186,117,23,0.1)',fill:false,tension:0.4,borderDash:[4,3],pointRadius:4,pointBackgroundColor:'#BA7517'},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+v+'K',font:{size:10}},grid:{color:'rgba(128,128,128,0.1)'}},x:{ticks:{font:{size:10}},grid:{display:false}}}}
+});
+</script>
